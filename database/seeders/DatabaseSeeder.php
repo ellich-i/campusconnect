@@ -19,6 +19,12 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
+        // Fixed student account for demos and testing (role defaults to student)
+        User::factory()->create([
+            'name' => 'Test Student',
+            'email' => 'student@campusconnect.test',
+        ]);
+
         // Default password of factory users is "password"; role defaults to student
         $students = User::factory()->count(5)->create();
 
