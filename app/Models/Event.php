@@ -46,4 +46,12 @@ class Event extends Model
         return $this->belongsToMany(User::class, 'event_participants')
             ->withPivot('joined_at');
     }
+
+    // Derived value: computed, never stored (the normalization decision)
+    public function availableSlots(): int
+    {
+        $taken = $this->participants_count ?? $this->participants()->count();
+
+        return max(0, $this->capacity - $taken);
+    }
 }
