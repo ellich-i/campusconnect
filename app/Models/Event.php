@@ -54,4 +54,14 @@ class Event extends Model
 
         return max(0, $this->capacity - $taken);
     }
+
+    // One place that knows how to cancel an event (used by student and admin controllers)
+    // One place that knows how to cancel an event (used by student and admin controllers)
+    public function cancel(): void
+    {
+        // status is not mass-assignable, so we set it directly.
+        // The PostgreSQL trigger writes the audit row.
+        $this->status = 'cancelled';
+        $this->save();
+    }
 }

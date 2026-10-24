@@ -27,9 +27,9 @@ class EventController extends Controller
             ->where('status', 'open')
             // Compare the raw column (no date() wrapper) so the index can be used
             ->where('event_date', '>=', today())
-            ->when($filters['category_id'] ?? null, fn ($q, $id) => $q->where('category_id', $id))
-            ->when($filters['location_id'] ?? null, fn ($q, $id) => $q->where('location_id', $id))
-            ->when($filters['date'] ?? null, fn ($q, $date) => $q->where('event_date', $date))
+            ->when($filters['category_id'] ?? null, fn($q, $id) => $q->where('category_id', $id))
+            ->when($filters['location_id'] ?? null, fn($q, $id) => $q->where('location_id', $id))
+            ->when($filters['date'] ?? null, fn($q, $date) => $q->where('event_date', $date))
             ->orderBy('event_date')
             ->orderBy('start_time')
             ->paginate(9)
@@ -89,14 +89,12 @@ class EventController extends Controller
     }
 
     // Soft way to remove an event: keep the record, mark it cancelled
+    // Soft way to remove an event: keep the record, mark it cancelled
     public function cancel(Event $event)
     {
         Gate::authorize('update', $event);
 
-        // status is not mass-assignable, so we set it directly.
-        // The PostgreSQL trigger writes the audit row.
-        $event->status = 'cancelled';
-        $event->save();
+        $event->cancel();
 
         return redirect()->route('events.show', $event)->with('status', 'Event cancelled.');
     }
