@@ -17,3 +17,11 @@ ALTER DEFAULT PRIVILEGES FOR ROLE campus_owner IN SCHEMA public
   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO campus_app;
 ALTER DEFAULT PRIVILEGES FOR ROLE campus_owner IN SCHEMA public
   GRANT USAGE, SELECT ON SEQUENCES TO campus_app;
+
+
+-- Read-only backup role: can read every table, cannot change anything
+CREATE ROLE campus_backup LOGIN PASSWORD '0W0EEEP';
+GRANT pg_read_all_data TO campus_backup;
+
+-- We revoked PUBLIC access earlier, so it needs permission to connect
+GRANT CONNECT ON DATABASE campusconnect TO campus_backup;
