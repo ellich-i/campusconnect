@@ -26,3 +26,5 @@ Last updated: 2026-10-25
 |------|----------|
 | EXPLAIN before index (Seq Scan, 25.476 ms) | evidence/explain_before.png |
 | EXPLAIN after index (Index Scan, 0.405 ms) | evidence/explain_after.png |
+| 16 | Wrong login page is rejected | Student account on /admin-login | evidence/test16_wrong_login_page.png | ⬜ |
+| 17 | Duplicate location name gives a friendly error | Admin adds "Library" again | evidence/test17_duplicate_location.png | ⬜ |

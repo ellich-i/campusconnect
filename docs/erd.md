@@ -51,6 +51,11 @@ erDiagram
         varchar new_status
         timestamp changed_at
     }
+        locations {
+        bigint id PK
+        varchar name UK
+        text description "nullable, added by a separate migration"
+    }
 ```
 
 **Notes**

@@ -19,7 +19,7 @@ A web app where PUP Calauan students create, discover, and join student-led camp
 ## Features
 
 - **Students:** register, log in, browse upcoming events, filter by category, location and date, create and manage their own events, join and leave events, and see their created and joined events on a dashboard.
-- **Admins:** protected dashboard, manage categories (full CRUD), change user roles, cancel or remove inappropriate events.
+- **Admins:** protected dashboard, manage categories and locations (full CRUD), change user roles, cancel or remove inappropriate events.
 - **Rules enforced on the server and in the database:** no double registration, no joining a full event, organizer cannot join their own event, capacity cannot go below current participants, invalid schedules are rejected.
 
 ## Two kinds of roles (do not mix them up)
@@ -86,7 +86,7 @@ ERD: [docs/erd.md](docs/erd.md)
 |-------|---------|-----------------|
 | `users` | Accounts | `email` UNIQUE, CHECK `role IN ('student','admin')` |
 | `categories` | Event categories | `name` UNIQUE |
-| `locations` | Campus places | `name` UNIQUE |
+| `locations` | Campus places | `name` UNIQUE, `description` nullable |
 | `events` | Student activities | FKs to users, categories, locations (RESTRICT), CHECK `capacity > 0`, CHECK `end_time > start_time`, CHECK status in (open, cancelled, completed) |
 | `event_participants` | Many-to-many users and events | UNIQUE(`event_id`, `user_id`), FKs (CASCADE) |
 | `event_status_logs` | Audit trail | Filled by a trigger |
@@ -183,3 +183,11 @@ Real-time chat, AI matching, payments, GPS maps, push notifications, mobile apps
 - Row-level security (RLS) is not implemented. Access control is done with PostgreSQL role privileges and Laravel policies.
 - Backups are run by hand. In a real deployment they would be scheduled and copied to another machine.
 - Demo accounts use a simple password and must not be used in production.
+
+### Two login pages
+
+Students log in at `/student-login` and admins at `/admin-login`. The role of the account must match the page, otherwise the login is rejected (and counted as a failed attempt for rate limiting). This is only for clearer entry points. The real protection is the `auth` and `admin` middleware on every admin route, so typing `/admin` as a student still gives 403.
+
+### Why a separate migration for `locations.description`
+
+`description` was added later with its own migration (`add_description_to_locations_table`) instead of editing the original one, because a migration that already ran on a database must not be changed. A new migration upgrades existing databases safely.
