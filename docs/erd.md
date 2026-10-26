@@ -24,6 +24,7 @@ erDiagram
     locations {
         bigint id PK
         varchar name UK
+        text description "nullable, added by a separate migration"
     }
     events {
         bigint id PK
@@ -50,11 +51,6 @@ erDiagram
         varchar old_status
         varchar new_status
         timestamp changed_at
-    }
-      locations {
-        bigint id PK
-        varchar name UK
-        text description "nullable, added by a separate migration"
     }
 ```
 
