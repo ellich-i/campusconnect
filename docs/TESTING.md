@@ -28,3 +28,5 @@ Last updated: 2026-10-25
 | EXPLAIN after index (Index Scan, 0.405 ms) | evidence/explain_after.png |
 | 16 | Wrong login page is rejected | Student account on /admin-login | evidence/test16_wrong_login_page.png | ⬜ |
 | 17 | Duplicate location name gives a friendly error | Admin adds "Library" again | evidence/test17_duplicate_location.png | ⬜ |
+| 18 | Organizer can edit own event | Edit title of Event 3, saved | evidence/test18_edit_event.png | ✅ |
+| 19 | Capacity cannot go below current participants | Lowered capacity under joined count, rejected | evidence/test19_capacity_floor.png | ✅ |
