@@ -1,6 +1,6 @@
 # CampusConnect
 
-**A Student-Driven System for Productive Vacant Hours**
+**A Web-Based System for Organizing and Joining Student-Led Activities During Vacant Class Hours**
 *"Vacant hours? Connect, engage in campus fun activities."*
 
 A web app where PUP Calauan students create, discover, and join student-led campus activities (study sessions, art meetups, peer circles). Built for COMP 016 (Web Development) and COMP 018 (Database Administration) Midterm Project, Phase 1.
