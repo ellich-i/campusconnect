@@ -1,4 +1,3 @@
-```blade
 <x-app-layout>
     <x-slot name="header">
         <div>
@@ -120,4 +119,3 @@
         </div>
     </div>
 </x-app-layout>
-```
