@@ -1,325 +1,574 @@
-```php
-<x-app-layout>
-    <div class="min-h-screen bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-4xl">
 
-            {{-- Back button --}}
-            <a href="{{ route('events.index') }}"
-               class="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-800">
-                <span>&larr;</span>
-                Back to Activities
+<x-app-layout>
+    <div class="create-event-page">
+        <style>
+            .create-event-page {
+                min-height: 100vh;
+                padding: 40px 0 65px;
+                background: #f5f8ff;
+                color: #19263d;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .create-container {
+                width: min(1120px, 92%);
+                margin: auto;
+            }
+
+            /* Back to Dashboard */
+            .back-dashboard {
+                display: inline-flex;
+                align-items: center;
+                gap: 9px;
+                padding: 11px 20px;
+                margin-bottom: 26px;
+                border: 1px solid #d7e3f5;
+                border-radius: 12px;
+                background: #ffffff;
+                color: #1769e0;
+                font-size: 14px;
+                font-weight: 700;
+                text-decoration: none;
+                transition: background .2s, transform .2s;
+            }
+
+            .back-dashboard:hover {
+                background: #eaf2ff;
+                transform: translateX(-3px);
+            }
+
+            /* Hero */
+            .create-hero {
+                padding: 36px;
+                margin-bottom: 32px;
+                border-radius: 22px;
+                background: linear-gradient(120deg, #1769e0, #104db0);
+                color: #ffffff;
+            }
+
+            .create-eyebrow {
+                display: inline-block;
+                padding: 6px 12px;
+                margin-bottom: 15px;
+                border-radius: 20px;
+                background: #ffffff26;
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: .4px;
+            }
+
+            .create-hero h1 {
+                margin-bottom: 12px;
+                font-size: clamp(30px, 4vw, 42px);
+                line-height: 1.2;
+                font-weight: 800;
+            }
+
+            .create-hero p {
+                color: #e4eeff;
+                font-size: 15px;
+                line-height: 1.7;
+            }
+
+            /* Form Card */
+            .create-form-card {
+                padding: 32px;
+                border: 1px solid #e0e8f5;
+                border-radius: 20px;
+                background: #ffffff;
+                box-shadow: 0 8px 25px #204d8d08;
+            }
+
+            .form-heading {
+                margin-bottom: 8px;
+                color: #19263d;
+                font-size: 23px;
+                font-weight: 800;
+            }
+
+            .form-subtitle {
+                margin-bottom: 28px;
+                color: #718096;
+                font-size: 14px;
+                line-height: 1.7;
+            }
+
+            .form-section {
+                padding-bottom: 26px;
+                margin-bottom: 26px;
+                border-bottom: 1px solid #e8eef7;
+            }
+
+            .form-section:last-of-type {
+                padding-bottom: 0;
+                margin-bottom: 0;
+                border-bottom: none;
+            }
+
+            .section-heading {
+                margin-bottom: 6px;
+                color: #19263d;
+                font-size: 17px;
+                font-weight: 800;
+            }
+
+            .section-description {
+                margin-bottom: 22px;
+                color: #718096;
+                font-size: 13px;
+                line-height: 1.6;
+            }
+
+            .form-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 22px;
+            }
+
+            .form-group {
+                min-width: 0;
+            }
+
+            .form-group.full-width {
+                grid-column: 1 / -1;
+            }
+
+            .form-label {
+                display: block;
+                margin-bottom: 9px;
+                color: #25344d;
+                font-size: 14px;
+                font-weight: 700;
+            }
+
+            .required-mark {
+                color: #e05252;
+            }
+
+            .form-control {
+                display: block;
+                width: 100%;
+                min-height: 48px;
+                padding: 12px 14px;
+                border: 1px solid #dce4f0;
+                border-radius: 12px;
+                background: #f8fafd;
+                color: #25344d;
+                font-family: inherit;
+                font-size: 14px;
+                transition: border-color .2s, box-shadow .2s,
+                    background .2s;
+            }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #1769e0;
+                background: #ffffff;
+                box-shadow: 0 0 0 3px #1769e01a;
+            }
+
+            .form-control::placeholder {
+                color: #8996aa;
+            }
+
+            textarea.form-control {
+                min-height: 125px;
+                resize: vertical;
+                line-height: 1.7;
+            }
+
+            .form-error {
+                margin-top: 7px;
+                color: #dc2626;
+                font-size: 13px;
+                line-height: 1.5;
+            }
+
+            .validation-box {
+                padding: 16px 20px;
+                margin-bottom: 24px;
+                border: 1px solid #fecaca;
+                border-radius: 12px;
+                background: #fef2f2;
+                color: #b91c1c;
+            }
+
+            .validation-box ul {
+                padding-left: 20px;
+                margin-top: 8px;
+                list-style: disc;
+            }
+
+            .validation-box li {
+                margin-top: 4px;
+                font-size: 13px;
+            }
+
+            /* Buttons */
+            .form-actions {
+                display: flex;
+                justify-content: flex-end;
+                flex-wrap: wrap;
+                gap: 12px;
+                padding-top: 28px;
+                margin-top: 28px;
+                border-top: 1px solid #e8eef7;
+            }
+
+            .btn {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                gap: 9px;
+                min-height: 46px;
+                padding: 12px 23px;
+                border: 1px solid transparent;
+                border-radius: 10px;
+                font-family: inherit;
+                font-size: 14px;
+                font-weight: 700;
+                text-decoration: none;
+                cursor: pointer;
+                transition: background .2s, transform .2s;
+            }
+
+            .btn-cancel {
+                border-color: #dce4f0;
+                background: #f8fafd;
+                color: #53657e;
+            }
+
+            .btn-cancel:hover {
+                background: #edf2f9;
+            }
+
+            .btn-submit {
+                background: #1769e0;
+                color: #ffffff;
+            }
+
+            .btn-submit:hover {
+                background: #104db0;
+                transform: translateY(-1px);
+            }
+
+            @media (max-width: 700px) {
+                .create-event-page {
+                    padding-top: 25px;
+                }
+
+                .create-hero {
+                    padding: 27px 22px;
+                    border-radius: 17px;
+                }
+
+                .create-form-card {
+                    padding: 23px 18px;
+                    border-radius: 16px;
+                }
+
+                .form-grid {
+                    grid-template-columns: 1fr;
+                    gap: 18px;
+                }
+
+                .form-group.full-width {
+                    grid-column: auto;
+                }
+
+                .form-actions {
+                    flex-direction: column-reverse;
+                }
+
+                .form-actions .btn {
+                    width: 100%;
+                }
+            }
+        </style>
+
+        <div class="create-container">
+
+            {{-- Back to Dashboard --}}
+            <a href="{{ route('dashboard') }}" class="back-dashboard">
+                <span aria-hidden="true">&larr;</span>
+                Back to Dashboard
             </a>
 
-            {{-- Header --}}
-            <div class="mb-7 overflow-hidden rounded-2xl bg-gradient-to-r from-blue-800 to-blue-500 px-6 py-9 text-white shadow-lg sm:px-9">
-                <p class="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-blue-100">
-                    CampusConnect · Student Activities
+            {{-- Page Header --}}
+            <section class="create-hero">
+                <span class="create-eyebrow">
+                    CAMPUSCONNECT · STUDENT ACTIVITIES
+                </span>
+
+                <h1>Create an Event</h1>
+
+                <p>
+                    Bring students together! Create an activity and share it
+                    with your campus community.
+                </p>
+            </section>
+
+            {{-- Event Form --}}
+            <section class="create-form-card">
+                <h2 class="form-heading">Event Information</h2>
+
+                <p class="form-subtitle">
+                    Complete the details below. Fields marked with
+                    <span class="required-mark">*</span> are required.
                 </p>
 
-                <h1 class="mb-3 text-3xl font-extrabold sm:text-4xl">
-                    Create an Event
-                </h1>
+                {{-- Validation Errors --}}
+                @if ($errors->any())
+                    <div class="validation-box">
+                        <strong>Please check the following fields:</strong>
 
-                <p class="max-w-2xl text-sm leading-7 text-blue-50 sm:text-base">
-                    Bring students together! Create an activity, share your interests,
-                    and make vacant campus hours more productive.
-                </p>
-            </div>
-
-            {{-- Validation errors --}}
-            @if ($errors->any())
-                <div class="mb-6 rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-                    <p class="font-bold">Please check the following fields:</p>
-
-                    <ul class="mt-2 list-inside list-disc space-y-1">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            {{-- Form --}}
-            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-9">
-
-                <div class="mb-8">
-                    <h2 class="text-xl font-extrabold text-slate-800">
-                        Event Information
-                    </h2>
-
-                    <p class="mt-2 text-sm leading-6 text-slate-500">
-                        Complete the details below to let other students discover your activity.
-                        Fields marked with <span class="font-bold text-red-500">*</span> are required.
-                    </p>
-                </div>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 <form action="{{ route('events.store') }}" method="POST">
                     @csrf
 
-                    {{-- Event title --}}
-                    <div class="mb-6">
-                        <label for="title" class="mb-2 block text-sm font-bold text-slate-700">
-                            Event Title <span class="text-red-500">*</span>
-                        </label>
+                    {{-- Basic Information --}}
+                    <div class="form-section">
+                        <h3 class="section-heading">Basic Information</h3>
 
-                        <input
-                            type="text"
-                            id="title"
-                            name="title"
-                            value="{{ old('title') }}"
-                            maxlength="150"
-                            placeholder="e.g. Campus Chess Meetup"
-                            required
-                            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
-                        >
-
-                        @error('title')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Description --}}
-                    <div class="mb-8">
-                        <label for="description" class="mb-2 block text-sm font-bold text-slate-700">
-                            Event Description <span class="text-red-500">*</span>
-                        </label>
-
-                        <textarea
-                            id="description"
-                            name="description"
-                            rows="5"
-                            maxlength="2000"
-                            placeholder="Describe your activity, its purpose, and what participants can expect..."
-                            required
-                            class="w-full resize-y rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
-                        >{{ old('description') }}</textarea>
-
-                        <p class="mt-2 text-xs text-slate-400">
-                            Maximum of 2,000 characters.
+                        <p class="section-description">
+                            Tell students what your activity is about.
                         </p>
 
-                        @error('description')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="title" class="form-label">
+                                    Event Title
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="title"
+                                    name="title"
+                                    class="form-control"
+                                    value="{{ old('title') }}"
+                                    placeholder="e.g. Campus Chess Meetup"
+                                    maxlength="255"
+                                    required
+                                >
+
+                                @error('title')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="description" class="form-label">
+                                    Event Description
+                                    <span class="required-mark">*</span>
+                                </label>
+
+                                <textarea
+                                    id="description"
+                                    name="description"
+                                    class="form-control"
+                                    placeholder="Describe your activity and what participants can expect..."
+                                    required
+                                >{{ old('description') }}</textarea>
+
+                                @error('description')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-8 border-t border-slate-100"></div>
-
-                    {{-- Category and location --}}
-                    <div class="mb-6">
-                        <h2 class="text-xl font-extrabold text-slate-800">
+                    {{-- Category and Location --}}
+                    <div class="form-section">
+                        <h3 class="section-heading">
                             Category and Location
-                        </h2>
+                        </h3>
 
-                        <p class="mt-2 text-sm leading-6 text-slate-500">
-                            Choose the activity category and where it will take place.
+                        <p class="section-description">
+                            Choose the category and location for your activity.
                         </p>
-                    </div>
 
-                    <div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="category_id" class="form-label">
+                                    Category
+                                    <span class="required-mark">*</span>
+                                </label>
 
-                        {{-- Category --}}
-                        <div>
-                            <label for="category_id" class="mb-2 block text-sm font-bold text-slate-700">
-                                Category <span class="text-red-500">*</span>
-                            </label>
+                                <select
+                                    id="category_id"
+                                    name="category_id"
+                                    class="form-control"
+                                    required
+                                >
+                                    <option value="">Select a category</option>
 
-                            <select
-                                id="category_id"
-                                name="category_id"
-                                required
-                                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
-                            >
-                                <option value="">Select a category</option>
+                                    @foreach ($categories as $category)
+                                        <option
+                                            value="{{ $category->id }}"
+                                            @selected(old('category_id') == $category->id)
+                                        >
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
 
-                                @foreach ($categories as $category)
-                                    <option
-                                        value="{{ $category->id }}"
-                                        @selected(old('category_id') == $category->id)
-                                    >
-                                        {{ $category->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                                @error('category_id')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                            @if ($categories->isEmpty())
-                                <p class="mt-2 text-xs text-amber-600">
-                                    No categories available. Ask the administrator to add categories first.
-                                </p>
-                            @endif
+                            <div class="form-group">
+                                <label for="location_id" class="form-label">
+                                    Location
+                                    <span class="required-mark">*</span>
+                                </label>
 
-                            @error('category_id')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                                <select
+                                    id="location_id"
+                                    name="location_id"
+                                    class="form-control"
+                                    required
+                                >
+                                    <option value="">Select a location</option>
 
-                        {{-- Location --}}
-                        <div>
-                            <label for="location_id" class="mb-2 block text-sm font-bold text-slate-700">
-                                Location <span class="text-red-500">*</span>
-                            </label>
+                                    @foreach ($locations as $location)
+                                        <option
+                                            value="{{ $location->id }}"
+                                            @selected(old('location_id') == $location->id)
+                                        >
+                                            {{ $location->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
 
-                            <select
-                                id="location_id"
-                                name="location_id"
-                                required
-                                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
-                            >
-                                <option value="">Select a location</option>
-
-                                @foreach ($locations as $location)
-                                    <option
-                                        value="{{ $location->id }}"
-                                        @selected(old('location_id') == $location->id)
-                                    >
-                                        {{ $location->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            @if ($locations->isEmpty())
-                                <p class="mt-2 text-xs text-amber-600">
-                                    No locations available. Ask the administrator to add locations first.
-                                </p>
-                            @endif
-
-                            @error('location_id')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
+                                @error('location_id')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
                     </div>
 
-                    <div class="mb-8 border-t border-slate-100"></div>
-
-                    {{-- Schedule and capacity --}}
-                    <div class="mb-6">
-                        <h2 class="text-xl font-extrabold text-slate-800">
+                    {{-- Schedule and Capacity --}}
+                    <div class="form-section">
+                        <h3 class="section-heading">
                             Schedule and Capacity
-                        </h2>
+                        </h3>
 
-                        <p class="mt-2 text-sm leading-6 text-slate-500">
-                            Set the event date, starting time, ending time, and maximum number of participants.
+                        <p class="section-description">
+                            Set the date, times, and maximum number of
+                            participants.
                         </p>
-                    </div>
 
-                    <div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="event_date" class="form-label">
+                                    Event Date
+                                    <span class="required-mark">*</span>
+                                </label>
 
-                        {{-- Event date --}}
-                        <div>
-                            <label for="event_date" class="mb-2 block text-sm font-bold text-slate-700">
-                                Event Date <span class="text-red-500">*</span>
-                            </label>
+                                <input
+                                    type="date"
+                                    id="event_date"
+                                    name="event_date"
+                                    class="form-control"
+                                    value="{{ old('event_date') }}"
+                                    min="{{ today()->format('Y-m-d') }}"
+                                    required
+                                >
 
-                            <input
-                                type="date"
-                                id="event_date"
-                                name="event_date"
-                                value="{{ old('event_date') }}"
-                                min="{{ today()->toDateString() }}"
-                                required
-                                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
-                            >
+                                @error('event_date')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                            @error('event_date')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                            <div class="form-group">
+                                <label for="capacity" class="form-label">
+                                    Maximum Participants
+                                    <span class="required-mark">*</span>
+                                </label>
 
-                        {{-- Capacity --}}
-                        <div>
-                            <label for="capacity" class="mb-2 block text-sm font-bold text-slate-700">
-                                Maximum Participants <span class="text-red-500">*</span>
-                            </label>
+                                <input
+                                    type="number"
+                                    id="capacity"
+                                    name="capacity"
+                                    class="form-control"
+                                    value="{{ old('capacity', 10) }}"
+                                    placeholder="e.g. 50"
+                                    min="1"
+                                    required
+                                >
 
-                            <input
-                                type="number"
-                                id="capacity"
-                                name="capacity"
-                                value="{{ old('capacity', 10) }}"
-                                min="1"
-                                max="500"
-                                required
-                                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
-                            >
+                                @error('capacity')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                            <p class="mt-2 text-xs text-slate-400">
-                                Minimum 1 and maximum 500 participants.
-                            </p>
+                            <div class="form-group">
+                                <label for="start_time" class="form-label">
+                                    Start Time
+                                    <span class="required-mark">*</span>
+                                </label>
 
-                            @error('capacity')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                                <input
+                                    type="time"
+                                    id="start_time"
+                                    name="start_time"
+                                    class="form-control"
+                                    value="{{ old('start_time') }}"
+                                    required
+                                >
 
-                        {{-- Start time --}}
-                        <div>
-                            <label for="start_time" class="mb-2 block text-sm font-bold text-slate-700">
-                                Start Time <span class="text-red-500">*</span>
-                            </label>
+                                @error('start_time')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                            <input
-                                type="time"
-                                id="start_time"
-                                name="start_time"
-                                value="{{ old('start_time') }}"
-                                required
-                                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
-                            >
+                            <div class="form-group">
+                                <label for="end_time" class="form-label">
+                                    End Time
+                                    <span class="required-mark">*</span>
+                                </label>
 
-                            @error('start_time')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                                <input
+                                    type="time"
+                                    id="end_time"
+                                    name="end_time"
+                                    class="form-control"
+                                    value="{{ old('end_time') }}"
+                                    required
+                                >
 
-                        {{-- End time --}}
-                        <div>
-                            <label for="end_time" class="mb-2 block text-sm font-bold text-slate-700">
-                                End Time <span class="text-red-500">*</span>
-                            </label>
-
-                            <input
-                                type="time"
-                                id="end_time"
-                                name="end_time"
-                                value="{{ old('end_time') }}"
-                                required
-                                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
-                            >
-
-                            <p class="mt-2 text-xs text-slate-400">
-                                Must be later than the start time.
-                            </p>
-
-                            @error('end_time')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
+                                @error('end_time')
+                                    <p class="form-error">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
                     </div>
 
-                    {{-- Buttons --}}
-                    <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-6 sm:flex-row sm:justify-end">
+                    {{-- Form Actions --}}
+                    <div class="form-actions">
                         <a
                             href="{{ route('events.index') }}"
-                            class="inline-flex min-h-12 items-center justify-center rounded-xl bg-slate-100 px-6 py-3 text-sm font-bold text-slate-600 transition hover:bg-slate-200"
+                            class="btn btn-cancel"
                         >
                             Cancel
                         </a>
 
-                        <button
-                            type="submit"
-                            class="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-7 py-3 text-sm font-bold text-white shadow-md shadow-blue-200 transition hover:bg-blue-700"
-                        >
+                        <button type="submit" class="btn btn-submit">
                             Create Event
                             <span aria-hidden="true">&rarr;</span>
                         </button>
                     </div>
                 </form>
-            </div>
-
-            <p class="mt-6 text-center text-xs leading-6 text-slate-400">
-                CampusConnect · Connect with your campus community.
-            </p>
+            </section>
         </div>
     </div>
 </x-app-layout>
-```

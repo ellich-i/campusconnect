@@ -15,6 +15,27 @@
                 margin: auto;
             }
 
+            .dashboard-back {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 24px;
+                padding: 11px 18px;
+                border-radius: 10px;
+                background: white;
+                border: 1px solid #dce4f0;
+                color: #1769e0;
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 700;
+                transition: background .2s, transform .2s;
+            }
+
+            .dashboard-back:hover {
+                background: #e8f1ff;
+                transform: translateX(-3px);
+            }
+
             .events-hero {
                 padding: 36px;
                 border-radius: 22px;
@@ -43,6 +64,7 @@
             .events-hero p {
                 color: #e4eeff;
                 font-size: 15px;
+                line-height: 1.7;
             }
 
             .events-section-title {
@@ -54,6 +76,7 @@
             .events-subtitle {
                 color: #718096;
                 font-size: 14px;
+                line-height: 1.7;
                 margin-bottom: 22px;
             }
 
@@ -88,6 +111,7 @@
                 color: white;
                 font-weight: bold;
                 cursor: pointer;
+                transition: background .2s;
             }
 
             .events-filters button:hover {
@@ -135,6 +159,7 @@
                 line-height: 1.4;
                 margin-bottom: 14px;
                 overflow-wrap: anywhere;
+                text-decoration: none;
             }
 
             .event-title:hover {
@@ -164,6 +189,11 @@
                 color: #1769e0;
                 font-weight: bold;
                 white-space: nowrap;
+                text-decoration: none;
+            }
+
+            .event-view:hover {
+                text-decoration: underline;
             }
 
             .events-empty {
@@ -184,6 +214,7 @@
             .events-empty p {
                 color: #718096;
                 font-size: 14px;
+                line-height: 1.7;
             }
 
             .events-pagination {
@@ -224,17 +255,28 @@
 
         <div class="events-container">
 
+            {{-- Back to Dashboard --}}
+            <a href="{{ route('dashboard') }}" class="dashboard-back">
+                <span aria-hidden="true">&larr;</span>
+                Back to Dashboard
+            </a>
+
+            {{-- Hero Section --}}
             <section class="events-hero">
                 <span class="eyebrow">CAMPUSCONNECT ACTIVITIES</span>
+
                 <h1>Discover your next activity.</h1>
+
                 <p>
                     Find activities, meet fellow students, and make your
                     vacant hours more meaningful.
                 </p>
             </section>
 
+            {{-- Filters Section --}}
             <section>
                 <h2 class="events-section-title">Explore activities</h2>
+
                 <p class="events-subtitle">
                     Browse available activities or use the filters to narrow
                     down your search.
@@ -246,6 +288,7 @@
 
                     <select name="category_id" aria-label="Filter by category">
                         <option value="">All categories</option>
+
                         @foreach ($categories as $c)
                             <option
                                 value="{{ $c->id }}"
@@ -258,6 +301,7 @@
 
                     <select name="location_id" aria-label="Filter by location">
                         <option value="">All locations</option>
+
                         @foreach ($locations as $l)
                             <option
                                 value="{{ $l->id }}"
@@ -279,6 +323,7 @@
                 </form>
             </section>
 
+            {{-- Activities Grid --}}
             <section class="events-grid">
                 @forelse ($events as $event)
                     <article class="event-card">
@@ -325,6 +370,7 @@
                 @empty
                     <div class="events-empty">
                         <h3>No activities found</h3>
+
                         <p>
                             There are no activities matching your filters.
                             Try selecting different options.
@@ -333,6 +379,7 @@
                 @endforelse
             </section>
 
+            {{-- Pagination --}}
             <div class="events-pagination">
                 {{ $events->links() }}
             </div>
