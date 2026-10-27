@@ -48,6 +48,14 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
+        // Friendly message first. The RESTRICT foreign key on events.organizer_id is the backup lock.
+        // We keep events so the activity history is not lost.
+        if ($user->organizedEvents()->exists()) {
+            return back()->withErrors([
+                'password' => 'You cannot delete your account because you have organized events. Please contact an administrator.',
+            ], 'userDeletion');
+        }
+
         Auth::logout();
 
         $user->delete();
